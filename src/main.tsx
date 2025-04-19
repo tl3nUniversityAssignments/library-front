@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { Auth0Provider } from "@auth0/auth0-react";
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
@@ -31,7 +32,15 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
+      <Auth0Provider
+        domain="dev-cyoqoi1i1hdlbr5p.us.auth0.com"
+        clientId="K1P4HAlTdNbtGcw5JTJGOZRRvGtJUCTz"
+        authorizationParams={{
+          redirect_uri: window.location.origin
+        }}
+      >
       <RouterProvider router={router} />
+      </Auth0Provider>
     </StrictMode>,
   )
 }
