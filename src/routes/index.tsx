@@ -1,8 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import logo from '../logo.svg'
-import LoginButton from '@/components/login'
-import LogoutButton from '@/components/logout'
-import Profile from '@/components/profile'
+import AuthButton from '@/components/auth'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -10,16 +7,8 @@ export const Route = createFileRoute('/')({
 
 function App() {
   return (
-    <div className="text-center">
-      <div>
-        <LoginButton />
-      </div>
-      <div>
-        <LogoutButton/>
-      </div>
-      <div>
-        <Profile />
-      </div>
+    <div className="flex items-center justify-center h-screen">
+      <AuthButton />
     </div>
   )
 }
