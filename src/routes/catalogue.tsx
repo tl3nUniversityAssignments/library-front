@@ -39,6 +39,7 @@ interface BookDTO {
   isbn: string;
   publicationYear: number;
   authorNames: string[];
+  availableCopies: number;
 }
 
 function Catalogue() {
@@ -60,7 +61,9 @@ function Catalogue() {
       book.isbn.includes(searchTerm);
 
     // make matches availability
-    return matchesSearch;
+    const matchesAvailability = availability === "" || availability === "all" || (availability === "available" && book.availableCopies > 0) || (availability === "unavailable" && book.availableCopies === 0);
+
+    return matchesSearch && matchesAvailability;
   });
 
   useEffect(() => {
@@ -137,7 +140,7 @@ function Catalogue() {
             <CardHeader>
               <CardTitle className="flex justify-between items-start">
                 <span className="block">{book.title}</span>
-                {true ? (
+                {book.availableCopies > 0 ? (
                   <Badge
                     variant="outline"
                     className="bg-green-50 text-green-700 border-green-200"
@@ -170,6 +173,10 @@ function Catalogue() {
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">ISBN:</span>
                   <span className="text-sm">{book.isbn}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Копій у наявності:</span>
+                  <span className="text-sm">{book.availableCopies}</span>
                 </div>
               </div>
             </CardContent>
