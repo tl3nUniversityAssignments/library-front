@@ -11,7 +11,7 @@ export const Route = createFileRoute('/')({
 function App() {
   const { isAuthenticated, loginWithRedirect } = useAuth0();
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-4">
       <header className="mb-8 text-center">
         <h1 className="text-4xl font-bold mb-2">Бібліотечна система</h1>
         <p className="text-xl text-muted-foreground">Управління видачами</p>
