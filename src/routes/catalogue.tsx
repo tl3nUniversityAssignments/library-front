@@ -81,7 +81,7 @@ function Catalogue() {
   }, []);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-4">
       <div className="mb-8 text-start flex justify-between">
         <div>
           <h1 className="text-4xl font-bold mb-2">Каталог книг</h1>

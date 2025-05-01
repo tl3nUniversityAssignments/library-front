@@ -11,10 +11,24 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as UserImport } from './routes/user'
+import { Route as LibrarianImport } from './routes/librarian'
 import { Route as CatalogueImport } from './routes/catalogue'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const UserRoute = UserImport.update({
+  id: '/user',
+  path: '/user',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LibrarianRoute = LibrarianImport.update({
+  id: '/librarian',
+  path: '/librarian',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const CatalogueRoute = CatalogueImport.update({
   id: '/catalogue',
@@ -46,6 +60,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CatalogueImport
       parentRoute: typeof rootRoute
     }
+    '/librarian': {
+      id: '/librarian'
+      path: '/librarian'
+      fullPath: '/librarian'
+      preLoaderRoute: typeof LibrarianImport
+      parentRoute: typeof rootRoute
+    }
+    '/user': {
+      id: '/user'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof UserImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -54,36 +82,46 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/catalogue': typeof CatalogueRoute
+  '/librarian': typeof LibrarianRoute
+  '/user': typeof UserRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/catalogue': typeof CatalogueRoute
+  '/librarian': typeof LibrarianRoute
+  '/user': typeof UserRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/catalogue': typeof CatalogueRoute
+  '/librarian': typeof LibrarianRoute
+  '/user': typeof UserRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/catalogue'
+  fullPaths: '/' | '/catalogue' | '/librarian' | '/user'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/catalogue'
-  id: '__root__' | '/' | '/catalogue'
+  to: '/' | '/catalogue' | '/librarian' | '/user'
+  id: '__root__' | '/' | '/catalogue' | '/librarian' | '/user'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CatalogueRoute: typeof CatalogueRoute
+  LibrarianRoute: typeof LibrarianRoute
+  UserRoute: typeof UserRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CatalogueRoute: CatalogueRoute,
+  LibrarianRoute: LibrarianRoute,
+  UserRoute: UserRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +135,9 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/catalogue"
+        "/catalogue",
+        "/librarian",
+        "/user"
       ]
     },
     "/": {
@@ -105,6 +145,12 @@ export const routeTree = rootRoute
     },
     "/catalogue": {
       "filePath": "catalogue.tsx"
+    },
+    "/librarian": {
+      "filePath": "librarian.tsx"
+    },
+    "/user": {
+      "filePath": "user.tsx"
     }
   }
 }
