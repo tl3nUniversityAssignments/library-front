@@ -24,8 +24,10 @@ function RouteComponent() {
         <p className="text-xl text-muted-foreground">
           Управління замовленнями та видачами
         </p>
+
       </header>
 
+      
       <Tabs defaultValue="orders" className="w-[400px]">
         <TabsList>
           <TabsTrigger value="orders">Замовлення</TabsTrigger>
