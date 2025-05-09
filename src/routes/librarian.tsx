@@ -17,6 +17,7 @@ export const Route = createFileRoute("/librarian")({
 });
 
 function RouteComponent() {
+  // TODO: make component fetch data from db and work with it here
   return (
     <div className="container mx-auto px-4 py-4">
       <header className="mb-8">
@@ -24,10 +25,8 @@ function RouteComponent() {
         <p className="text-xl text-muted-foreground">
           Управління замовленнями та видачами
         </p>
-
       </header>
 
-      
       <Tabs defaultValue="orders" className="w-[400px]">
         <TabsList>
           <TabsTrigger value="orders">Замовлення</TabsTrigger>
@@ -78,10 +77,12 @@ function RouteComponent() {
             </CardContent>
             <Separator />
             <CardFooter className="grid grid-cols-2 gap-2">
+              {/* TODO: make button show alert (or smth?) where librarian can choose to give out book on hands or in the reading room */}
               <Button>
                 <Check className="w-4 h-4" />
                 <span>Прийняти</span>
               </Button>
+              {/* TODO: make button remove the order from db */}
               <Button variant="outline">
                 <X className="w-4 h-4" />
                 <span>Відхилити</span>
@@ -151,6 +152,7 @@ function RouteComponent() {
             </CardContent>
             <Separator />
             <CardFooter>
+              {/* TODO: make button to change this loan to "returned" */}
               <Button className="w-full">
                 <Check className="w-4 h-4" />
                 <span>Прийняти повернення</span>

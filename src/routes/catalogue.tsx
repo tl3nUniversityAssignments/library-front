@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import {
   Card,
@@ -29,18 +29,22 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Filter } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import type { BookDTO } from "@/lib/types";
 
 export const Route = createFileRoute("/catalogue")({
   component: Catalogue,
 });
-
-interface BookDTO {
-  title: string;
-  isbn: string;
-  publicationYear: number;
-  authorNames: string[];
-  availableCopies: number;
-}
 
 function Catalogue() {
   const [books, setBooks] = useState<BookDTO[]>([]);
@@ -61,7 +65,11 @@ function Catalogue() {
       book.isbn.includes(searchTerm);
 
     // make matches availability
-    const matchesAvailability = availability === "" || availability === "all" || (availability === "available" && book.availableCopies > 0) || (availability === "unavailable" && book.availableCopies === 0);
+    const matchesAvailability =
+      availability === "" ||
+      availability === "all" ||
+      (availability === "available" && book.availableCopies > 0) ||
+      (availability === "unavailable" && book.availableCopies === 0);
 
     return matchesSearch && matchesAvailability;
   });
@@ -80,6 +88,7 @@ function Catalogue() {
     fetchBooks();
   }, []);
 
+  const navigate = useNavigate();
   return (
     <div className="container mx-auto px-4 py-4">
       <div className="mb-8 text-start flex justify-between">
@@ -175,14 +184,40 @@ function Catalogue() {
                   <span className="text-sm">{book.isbn}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Копій у наявності:</span>
+                  <span className="text-sm text-muted-foreground">
+                    Копій у наявності:
+                  </span>
                   <span className="text-sm">{book.availableCopies}</span>
                 </div>
               </div>
             </CardContent>
             <Separator />
             <CardFooter>
-              <Button className="w-full">Замовити</Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button className="w-full">Замовити</Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Замовлення книги</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Після замовлення цієї книги, вона буде додана до вашого
+                      профілю. Будь ласка, повертайте книги вчасно!
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Відмінити</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => {
+                        // TODO: add order to db
+                        navigate({ to: "/user" });
+                      }}
+                    >
+                      Замовити
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </CardFooter>
           </Card>
         ))}
