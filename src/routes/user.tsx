@@ -15,14 +15,13 @@ import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import type { LoanDTO } from "@/lib/types";
 import { useAuth0 } from "@auth0/auth0-react";
+import { normalizeEmail } from "@/lib/utils";
 
 export const Route = createFileRoute("/user")({
   component: RouteComponent,
 });
 
-function normalizeEmail(email) {
-  return email?.trim().toLowerCase().normalize();
-}
+
 
 function RouteComponent() {
   const { user } = useAuth0();
@@ -31,17 +30,17 @@ function RouteComponent() {
 
   const onhandLoans = loans.filter(
     (loan) =>
-      normalizeEmail(loan.readerEmail) === normalizeEmail(user?.email) &&
+      normalizeEmail(loan.readerEmail) === normalizeEmail(user?.email!) &&
       (loan.status === "CHECKED_OUT" || loan.status === "READING_ROOM"),
   );
   const orderedLoans = loans.filter(
     (loan) =>
-      normalizeEmail(loan.readerEmail) === normalizeEmail(user?.email) &&
+      normalizeEmail(loan.readerEmail) === normalizeEmail(user?.email!) &&
       loan.status === "ORDERED",
   );
   const historyLoans = loans.filter(
     (loan) =>
-      normalizeEmail(loan.readerEmail) === normalizeEmail(user?.email) &&
+      normalizeEmail(loan.readerEmail) === normalizeEmail(user?.email!) &&
       loan.status === "RETURNED",
   );
 

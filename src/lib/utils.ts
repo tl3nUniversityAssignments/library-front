@@ -13,3 +13,7 @@ export function isLibrarian() {
   }
   return false;
 }
+
+export function normalizeEmail(email: string) {
+  return email?.trim().toLowerCase().normalize();
+}
