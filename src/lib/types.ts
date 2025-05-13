@@ -3,7 +3,7 @@ export interface BookDTO {
   isbn: string;
   publicationYear: number;
   authorNames: string[];
-  availableCopies: number;
+  copiesId: number[];
 };
 
 export interface LoanDTO {

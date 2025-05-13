@@ -41,6 +41,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import type { BookDTO } from "@/lib/types";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const Route = createFileRoute("/catalogue")({
   component: Catalogue,
@@ -50,6 +51,8 @@ function Catalogue() {
   const [books, setBooks] = useState<BookDTO[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [availability, setAvailability] = useState("");
+
+  const { user } = useAuth0();
 
   const filteredBooks = books.filter((book) => {
     const matchesSearch =
@@ -68,8 +71,8 @@ function Catalogue() {
     const matchesAvailability =
       availability === "" ||
       availability === "all" ||
-      (availability === "available" && book.availableCopies > 0) ||
-      (availability === "unavailable" && book.availableCopies === 0);
+      (availability === "available" && book.copiesId.length > 0) ||
+      (availability === "unavailable" && book.copiesId.length === 0);
 
     return matchesSearch && matchesAvailability;
   });
@@ -149,7 +152,7 @@ function Catalogue() {
             <CardHeader>
               <CardTitle className="flex justify-between items-start">
                 <span className="block">{book.title}</span>
-                {book.availableCopies > 0 ? (
+                {book.copiesId.length > 0 ? (
                   <Badge
                     variant="outline"
                     className="bg-green-50 text-green-700 border-green-200"
@@ -187,7 +190,7 @@ function Catalogue() {
                   <span className="text-sm text-muted-foreground">
                     Копій у наявності:
                   </span>
-                  <span className="text-sm">{book.availableCopies}</span>
+                  <span className="text-sm">{book.copiesId.length}</span>
                 </div>
               </div>
             </CardContent>
@@ -210,7 +213,29 @@ function Catalogue() {
                     <AlertDialogAction
                       onClick={() => {
                         // TODO: add order to db
-                        navigate({ to: "/user" });
+                        fetch(
+                          "http://localhost:8080/library_war_exploded/loans",
+                          {
+                            method: "POST",
+                            headers: {
+                              "Content-Type": "application/json; charset=UTF-8",
+                            },
+                            body: JSON.stringify({
+                              copyId: book.copiesId.pop(),
+                              readerId: user?.sub,
+                              status: "ORDERED",
+                            }),
+                          },
+                        )
+                          .then((response) => {
+                            if (!response.ok) {
+                              throw new Error(`HTTP error ${response.status}`);
+                            }
+                          })
+                          .then(() => navigate({ to: "/user" }))
+                          .catch((error) => {
+                            console.error("Failed to order book:", error);
+                          });
                       }}
                     >
                       Замовити

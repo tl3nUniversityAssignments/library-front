@@ -21,11 +21,8 @@ export const Route = createFileRoute("/user")({
   component: RouteComponent,
 });
 
-
-
 function RouteComponent() {
   const { user } = useAuth0();
-  // TODO: make component fetch data from db and work with it here
   const [loans, setLoans] = useState<LoanDTO[]>([]);
 
   const onhandLoans = loans.filter(
@@ -163,8 +160,29 @@ function RouteComponent() {
               </CardContent>
               <Separator />
               <CardFooter>
-                {/* TODO: make button delete this order from db */}
-                <Button variant="outline" className="w-full">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {
+                    fetch(
+                      `http://localhost:8080/library_war_exploded/loans/${loan.id}`,
+                      {
+                        method: "DELETE",
+                      },
+                    )
+                      .then((response) => {
+                        if (!response.ok) {
+                          throw new Error(`HTTP error ${response.status}`);
+                        }
+                      })
+                      .then(() => {
+                        window.location.reload();
+                      })
+                      .catch((error) => {
+                        console.error("Failed to return loan:", error);
+                      });
+                  }}
+                >
                   Скасувати
                 </Button>
               </CardFooter>
