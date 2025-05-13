@@ -42,12 +42,17 @@ import {
 } from "@/components/ui/alert-dialog";
 import type { BookDTO } from "@/lib/types";
 import { useAuth0 } from "@auth0/auth0-react";
+import { ProtectedRoute } from "@/components/protected-route";
 
 export const Route = createFileRoute("/catalogue")({
-  component: Catalogue,
+  component: () => (
+    <ProtectedRoute>
+      <RouteComponent />
+    </ProtectedRoute>
+  ),
 });
 
-function Catalogue() {
+function RouteComponent() {
   const [books, setBooks] = useState<BookDTO[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [availability, setAvailability] = useState("");

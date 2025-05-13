@@ -16,9 +16,14 @@ import { useEffect, useState } from "react";
 import type { LoanDTO } from "@/lib/types";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { ProtectedRoute } from "@/components/protected-route";
 
 export const Route = createFileRoute("/librarian")({
-  component: RouteComponent,
+  component: () => (
+    <ProtectedRoute requireLibrarian>
+      <RouteComponent />
+    </ProtectedRoute>
+  ),
 });
 
 function RouteComponent() {
